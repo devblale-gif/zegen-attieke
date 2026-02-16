@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Produits - ZEGEN IVOIRE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+<script src="../init-data.js"></script>
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2B48C 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #8B4513;
+            font-size: 28px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052a3;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            font-size: 16px;
+            padding: 12px 30px;
+        }
+
+        .btn-success:hover {
+            background: #20c997;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            background: #d4af37;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Product Management */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .product-weight {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .product-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            color: #8B4513;
+            font-size: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #d4af37;
+            outline: none;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .image-upload {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload:hover {
+            border-color: #d4af37;
+            background: #fffaf0;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .delivery-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .delivery-table th,
+        .delivery-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .delivery-table th {
+            background: #8B4513;
+            color: white;
+        }
+
+        .delivery-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .delivery-table input {
+            width: 120px;
+            padding: 8px;
+            border: 2px solid #d4af37;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .delivery-table input:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ Gestion des Produits & Livraison</h1>
+            <a href="admin.html" class="btn btn-secondary">↩ Retour Admin</a>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('products')">📦 Produits</button>
+            <button class="tab-button" onclick="switchTab('delivery')">🚚 Frais de Livraison</button>
+        </div>
+
+        <!-- PRODUCTS TAB -->
+        <div id="products" class="tab-content active">
+            <div class="form-container">
+                <h2 class="form-title">➕ Ajouter / Modifier un Article</h2>
+                
+                <div class="form-group">
+                    <label>Photo de l'article:</label>
+                    <div class="image-upload" onclick="document.getElementById('imageInput').click()">
+                        <p>📸 Cliquez pour uploader une image</p>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload()">
+                    </div>
+                    <img id="imagePreview" class="image-preview" style="display: none;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nom de l'article:</label>
+                        <input type="text" id="productName" placeholder="Ex: Attieke Premium">
+                    </div>
+                    <div class="form-group">
+                        <label>Prix au kg (FCFA):</label>
+                        <input type="number" id="productPrice" placeholder="Ex: 10000">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Poids minimum (kg):</label>
+                        <input type="number" id="productMinWeight" placeholder="Ex: 0.5" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Poids maximum (kg):</label>
+                        <input type="number" id="productMaxWeight" placeholder="Ex: 20" step="0.5">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="productDescription" placeholder="Description du produit..."></textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveProduct()">💾 Enregistrer l'Article</button>
+                    <button class="btn btn-secondary" onclick="resetForm()">🔄 Réinitialiser</button>
+                </div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchBox" placeholder="🔍 Rechercher un article..." onkeyup="filterProducts()">
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div id="productsContainer" class="products-grid">
+                <!-- Products will be populated here -->
+            </div>
+        </div>
+
+        <!-- DELIVERY TAB -->
+        <div id="delivery" class="tab-content">
+            <div class="form-container">
+                <h2 class="form-title">🚚 Frais de Livraison par Zone</h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    💡 Modifiez le prix de livraison pour chaque quartier/commune. Ces prix s'appliqueront immédiatement sur le site client.
+                </p>
+
+                <table class="delivery-table" id="deliveryTable">
+                    <thead>
+                        <tr>
+                            <th>Quartier / Commune</th>
+                            <th>Frais (FCFA)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deliveryBody">
+                        <!-- Delivery fees will be populated here -->
+                    </tbody>
+                </table>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="addDeliveryRow()">➕ Ajouter une Zone</button>
+                    <button class="btn btn-success" onclick="saveDeliveryFees()">💾 Enregistrer les Frais</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2 class="form-title">✏️ Modifier l'Article</h2>
+            
+            <div class="form-group">
+                <label>Photo:</label>
+                <div class="image-upload" onclick="document.getElementById('editImageInput').click()">
+                    <p>📸 Cliquez pour changer l'image</p>
+                    <input type="file" id="editImageInput" accept="image/*" style="display: none;" onchange="handleEditImageUpload()">
+                </div>
+                <img id="editImagePreview" class="image-preview">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nom:</label>
+                    <input type="text" id="editProductName">
+                </div>
+                <div class="form-group">
+                    <label>Prix au kg (FCFA):</label>
+                    <input type="number" id="editProductPrice">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Poids minimum (kg):</label>
+                    <input type="number" id="editProductMinWeight" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label>Poids maximum (kg):</label>
+                    <input type="number" id="editProductMaxWeight" step="0.5">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea id="editProductDescription"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="updateProduct()">💾 Mettre à jour</button>
+                <button class="btn btn-secondary" onclick="closeEditModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditId = null;
+        let allProducts = [];
+        let allDeliveryFees = {};
+
+        // Initialize
+        function init() {
+            loadProducts();
+            loadDeliveryFees();
+        }
+
+        // Product Management
+        function loadProducts() {
+            const stored = localStorage.getItem('zegenProducts');
+            if (stored) {
+                allProducts = JSON.parse(stored);
+            } else {
+                // Default products
+                allProducts = [
+                    {
+                        id: 1,
+                        nom: "Attieke Maïs",
+                        pricePerKg: 9000,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Attieke blanc traditionnel à base de maïs",
+                        image: ""
+                    },
+                    {
+                        id: 2,
+                        nom: "Attieke Manioc Premium",
+                        pricePerKg: 12000,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Attieke fin et savoureux fait à partir de manioc",
+                        image: ""
+                    },
+                    {
+                        id: 3,
+                        nom: "Attieke Riz",
+                        pricePerKg: 10500,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Attieke mixte riz et maïs",
+                        image: ""
+                    },
+                    {
+                        id: 4,
+                        nom: "Attieke Coco",
+                        pricePerKg: 11000,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Attieke parfumé à la noix de coco",
+                        image: ""
+                    },
+                    {
+                        id: 5,
+                        nom: "Attieke Sel & Épice",
+                        pricePerKg: 11500,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Attieke épicé avec sel et assaisonnements",
+                        image: ""
+                    },
+                    {
+                        id: 6,
+                        nom: "Attieke Sucré",
+                        pricePerKg: 13000,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Attieke sucré pour les amateurs de sucreries",
+                        image: ""
+                    },
+                    {
+                        id: 7,
+                        nom: "Attieke Spécial Premium",
+                        pricePerKg: 14700,
+                        minWeight: 0.5,
+                        maxWeight: 20,
+                        description: "Notre meilleure recette d'attieke",
+                        image: ""
+                    }
+                ];
+                saveProducts();
+            }
+            displayProducts(allProducts);
+        }
+
+        function displayProducts(products) {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">
+                        ${product.image ? `<img src="${product.image}" alt="${product.nom}">` : '<p style="color: #999;">Pas d\'image</p>'}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.nom}</div>
+                        <div class="product-price">${product.pricePerKg} FCFA/kg</div>
+                        <div class="product-weight">Poids: ${product.minWeight}kg - ${product.maxWeight}kg</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="editProduct(${product.id})">✏️ Éditer</button>
+                            <button class="btn btn-danger" onclick="deleteProduct(${product.id})">🗑️ Supprimer</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function handleImageUpload() {
+            const file = document.getElementById('imageInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleEditImageUpload() {
+            const file = document.getElementById('editImageInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editImagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const minWeight = parseFloat(document.getElementById('productMinWeight').value);
+            const maxWeight = parseFloat(document.getElementById('productMaxWeight').value);
+            const description = document.getElementById('productDescription').value;
+            const image = document.getElementById('imagePreview').src || '';
+
+            if (!name || !price || !minWeight || !maxWeight) {
+                showAlert('Veuillez remplir tous les champs obligatoires!', 'error');
+                return;
+            }
+
+            if (minWeight >= maxWeight) {
+                showAlert('Le poids minimum doit être inférieur au poids maximum!', 'error');
+                return;
+            }
+
+            const newProduct = {
+                id: Date.now(),
+                nom: name,
+                pricePerKg: price,
+                minWeight: minWeight,
+                maxWeight: maxWeight,
+                description: description,
+                image: image
+            };
+
+            allProducts.push(newProduct);
+            saveProducts();
+            resetForm();
+            displayProducts(allProducts);
+            showAlert('✅ Article ajouté! Les clients le verront immédiatement.', 'success');
+        }
+
+        function editProduct(id) {
+            const product = allProducts.find(p => p.id === id);
+            if (product) {
+                currentEditId = id;
+                document.getElementById('editProductName').value = product.nom;
+                document.getElementById('editProductPrice').value = product.pricePerKg;
+                document.getElementById('editProductMinWeight').value = product.minWeight;
+                document.getElementById('editProductMaxWeight').value = product.maxWeight;
+                document.getElementById('editProductDescription').value = product.description;
+                document.getElementById('editImagePreview').src = product.image || '';
+                if (!product.image) {
+                    document.getElementById('editImagePreview').style.display = 'none';
+                }
+                document.getElementById('editModal').style.display = 'block';
+            }
+        }
+
+        function updateProduct() {
+            if (currentEditId === null) return;
+
+            const name = document.getElementById('editProductName').value;
+            const price = parseFloat(document.getElementById('editProductPrice').value);
+            const minWeight = parseFloat(document.getElementById('editProductMinWeight').value);
+            const maxWeight = parseFloat(document.getElementById('editProductMaxWeight').value);
+            const description = document.getElementById('editProductDescription').value;
+            const image = document.getElementById('editImagePreview').src || '';
+
+            if (!name || !price || !minWeight || !maxWeight) {
+                showAlert('Veuillez remplir tous les champs!', 'error');
+                return;
+            }
+
+            const product = allProducts.find(p => p.id === currentEditId);
+            if (product) {
+                product.nom = name;
+                product.pricePerKg = price;
+                product.minWeight = minWeight;
+                product.maxWeight = maxWeight;
+                product.description = description;
+                product.image = image;
+                saveProducts();
+                displayProducts(allProducts);
+                closeEditModal();
+                showAlert('✅ Article MAJ! Les clients verront les changements.', 'success');
+            }
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet article?')) {
+                allProducts = allProducts.filter(p => p.id !== id);
+                saveProducts();
+                displayProducts(allProducts);
+                showAlert('✅ Article supprimé avec succès!', 'success');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productMinWeight').value = '';
+            document.getElementById('productMaxWeight').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imagePreview').src = '';
+            document.getElementById('imageInput').value = '';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditId = null;
+        }
+
+        function filterProducts() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+            const filtered = allProducts.filter(p => p.nom.toLowerCase().includes(search));
+            displayProducts(filtered);
+        }
+
+        function saveProducts() {
+            localStorage.setItem('zegenProducts', JSON.stringify(allProducts));
+        }
+
+        // Delivery Fees Management
+        function loadDeliveryFees() {
+            const stored = localStorage.getItem('zegenDeliveryFees');
+            if (stored) {
+                allDeliveryFees = JSON.parse(stored);
+            } else {
+                // Liste complète de quartiers et communes avec frais par défaut
+                allDeliveryFees = {
+                    // ABIDJAN - District
+                    'Plateau': 2500,
+                    'Treichville': 2500,
+                    'Adjamé': 3000,
+                    'Cocody': 3500,
+                    'Yopougon': 3000,
+                    'Attécoubé': 2500,
+                    'Marcory': 3000,
+                    'Port-Bouët': 4000,
+                    'Abobo': 3000,
+                    'Anyama': 4500,
+                    'Angre': 2000,
+                    'Koumassi': 3000,
+                    
+                    // AUTRES COMMUNES - Abidjan
+                    'Biétry': 3500,
+                    'Deshames': 3000,
+                    'Gonzagueville': 3500,
+                    'Goungou': 4000,
+                    'Kouté': 2000,
+                    'Locodja': 2500,
+                    'Riviera': 4500,
+                    
+                    // AUTRES COMMUNES - Région
+                    'Yamoussoukro': 8000,
+                    'Bouaké': 7000,
+                    'Daloa': 6000,
+                    'Korhogo': 8000,
+                    'San-Pédro': 9000,
+                    'Gagnoa': 6500,
+                    'Dimbokro': 7000
+                };
+                localStorage.setItem('zegenDeliveryFees', JSON.stringify(allDeliveryFees));
+            }
+            displayDeliveryFees();
+        }
+
+        function displayDeliveryFees() {
+            const tbody = document.getElementById('deliveryBody');
+            tbody.innerHTML = '';
+
+            Object.entries(allDeliveryFees).forEach(([quarter, fee], index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <input type="text" value="${quarter}" id="quarter_${index}" placeholder="Quartier/Commune">
+                    </td>
+                    <td>
+                        <input type="number" value="${fee}" id="fee_${index}" placeholder="Frais">
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="removeDeliveryRow('${quarter}')">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function addDeliveryRow() {
+            const tbody = document.getElementById('deliveryBody');
+            const index = tbody.children.length;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <input type="text" id="quarter_${index}" placeholder="Nouveau quartier">
+                </td>
+                <td>
+                    <input type="number" id="fee_${index}" placeholder="Frais">
+                </td>
+                <td>
+                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="this.parentElement.parentElement.remove()">🗑️</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        function removeDeliveryRow(quarter) {
+            delete allDeliveryFees[quarter];
+            displayDeliveryFees();
+        }
+
+        function saveDeliveryFees() {
+            allDeliveryFees = {};
+            const rows = document.querySelectorAll('#deliveryBody tr');
+            
+            rows.forEach((row, index) => {
+                const quarter = row.querySelector(`input[id^="quarter_"]`).value.trim();
+                const fee = parseFloat(row.querySelector(`input[id^="fee_"]`).value);
+                
+                if (quarter && !isNaN(fee) && fee > 0) {
+                    allDeliveryFees[quarter] = fee;
+                }
+            });
+
+            if (Object.keys(allDeliveryFees).length === 0) {
+                showAlert('❌ Veuillez ajouter au moins une zone de livraison!', 'error');
+                return;
+            }
+
+            localStorage.setItem('zegenDeliveryFees', JSON.stringify(allDeliveryFees));
+            showAlert('✅ Frais de livraison MAJ avec succès! Les clients verront les changements.', 'success');
+            
+            // Mettre à jour l'affichage
+            displayDeliveryFees();
+            
+            // Log pour confirmer
+            console.log('Zones de livraison sauvegardées:', allDeliveryFees);
+        }
+
+        function switchTab(tab) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

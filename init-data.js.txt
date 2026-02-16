@@ -1,0 +1,64 @@
+if (!localStorage.getItem('zegenProducts')) {
+
+localStorage.setItem('zegenProducts', JSON.stringify([
+{ id:1, nom:"Attieke Premium", pricePerKg:1000, minWeight:0.5, maxWeight:50, description:"Attieke frais de qualité supérieure" },
+{ id:2, nom:"Attieke Garba", pricePerKg:900, minWeight:0.5, maxWeight:50, description:"Attieke spécial Garba" },
+{ id:3, nom:"Attieke Fin", pricePerKg:1200, minWeight:0.5, maxWeight:50, description:"Attieke très fin et propre" },
+{ id:4, nom:"Attieke Moyen", pricePerKg:950, minWeight:0.5, maxWeight:50, description:"Attieke texture moyenne" },
+{ id:5, nom:"Attieke Local", pricePerKg:800, minWeight:0.5, maxWeight:50, description:"Attieke local économique" }
+]));
+
+}
+
+if (!localStorage.getItem('zegenDeliveryFees')) {
+
+localStorage.setItem('zegenDeliveryFees', JSON.stringify({
+'Plateau':2500,
+'Treichville':2500,
+'Adjamé':3000,
+'Cocody':3500,
+'Yopougon':3000,
+'Attécoubé':2500,
+'Marcory':3000,
+'Port-Bouët':4000,
+'Abobo':3000,
+'Anyama':4500,
+'Angre':2000,
+'Koumassi':3000,
+'Biétry':3500,
+'Riviera':4500
+}));
+
+}
+if (!localStorage.getItem('zegenProducts')) {
+
+localStorage.setItem('zegenProducts', JSON.stringify([
+{ id:1, nom:"Attieke Premium", pricePerKg:1000, minWeight:0.5, maxWeight:50, description:"Attieke frais de qualité supérieure" },
+{ id:2, nom:"Attieke Garba", pricePerKg:900, minWeight:0.5, maxWeight:50, description:"Attieke spécial Garba" },
+{ id:3, nom:"Attieke Fin", pricePerKg:1200, minWeight:0.5, maxWeight:50, description:"Attieke très fin et propre" },
+{ id:4, nom:"Attieke Moyen", pricePerKg:950, minWeight:0.5, maxWeight:50, description:"Attieke texture moyenne" },
+{ id:5, nom:"Attieke Local", pricePerKg:800, minWeight:0.5, maxWeight:50, description:"Attieke local économique" }
+]));
+
+}
+
+if (!localStorage.getItem('zegenDeliveryFees')) {
+
+localStorage.setItem('zegenDeliveryFees', JSON.stringify({
+'Plateau':2500,
+'Treichville':2500,
+'Adjamé':3000,
+'Cocody':3500,
+'Yopougon':3000,
+'Attécoubé':2500,
+'Marcory':3000,
+'Port-Bouët':4000,
+'Abobo':3000,
+'Anyama':4500,
+'Angre':2000,
+'Koumassi':3000,
+'Biétry':3500,
+'Riviera':4500
+}));
+
+}
